@@ -6,7 +6,7 @@ resolver = "2"
 edition = "2021"
 rust-version = "1.75"
 license = "MIT"
-repository = "https://example.invalid/zotero-s3-webdav-harness"
+repository = "https://github.com/CuB3y0nd/Libris"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
