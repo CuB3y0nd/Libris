@@ -9,6 +9,7 @@ use zotero_s3_webdav_provisioner::error::{HarnessError, Result};
 pub struct RecordedRequest {
     pub method: String,
     pub path: String,
+    pub headers: Vec<(String, String)>,
     pub body: Vec<u8>,
 }
 
@@ -66,8 +67,18 @@ fn parse_request(bytes: &[u8]) -> Option<RecordedRequest> {
     let mut parts = request_line.split_whitespace();
     let method = parts.next()?.to_string();
     let path = parts.next()?.to_string();
+    let mut headers = Vec::new();
+    for line in lines {
+        let (name, value) = line.split_once(':')?;
+        headers.push((name.trim().to_string(), value.trim().to_string()));
+    }
     let body = bytes[split + 4..].to_vec();
-    Some(RecordedRequest { method, path, body })
+    Some(RecordedRequest {
+        method,
+        path,
+        headers,
+        body,
+    })
 }
 
 pub fn json_response(status: u16, body: &str) -> String {
