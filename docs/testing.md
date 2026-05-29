@@ -45,12 +45,16 @@ DELETE
 Run:
 
 ```sh
-make up
-SMOKE_WEBDAV_URL=https://dav.example.com \
+make up-e2e
+SMOKE_WEBDAV_URL=http://127.0.0.1:8090 \
 SMOKE_WEBDAV_USER=alice \
 SMOKE_WEBDAV_PASSWORD=... \
 make smoke
 ```
+
+Use `make up` with a real S3 bucket for production-like validation. The E2E
+target starts MinIO only as a local S3-compatible test double and creates the
+configured bucket before provisioning users.
 
 ## Manual Zotero acceptance test
 

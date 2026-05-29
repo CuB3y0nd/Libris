@@ -35,6 +35,7 @@ services:
     build:
       context: ../..
       dockerfile: apps/provisioner/Dockerfile
+      network: ${DOCKER_BUILD_NETWORK:-default}
     container_name: zotero-s3-webdav-provisioner
     restart: "no"
     depends_on:
