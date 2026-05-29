@@ -46,7 +46,7 @@ Run:
 
 ```sh
 make up-e2e
-SMOKE_WEBDAV_URL=http://127.0.0.1:8090 \
+SMOKE_WEBDAV_URL=http://127.0.0.1:5227 \
 SMOKE_WEBDAV_USER=alice \
 SMOKE_WEBDAV_PASSWORD=... \
 make smoke

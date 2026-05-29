@@ -21,7 +21,7 @@ services:
       - "8080"
     ports:
       # Loopback bindings support an existing host-level Caddy.
-      - "127.0.0.1:${SFTPGO_WEBDAV_PORT:-8090}:8090"
+      - "127.0.0.1:${SFTPGO_WEBDAV_PORT:-5227}:8090"
       - "127.0.0.1:${SFTPGO_ADMIN_PORT:-8080}:8080"
     volumes:
       - sftpgo_state:/var/lib/sftpgo
