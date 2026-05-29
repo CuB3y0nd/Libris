@@ -37,7 +37,7 @@ Allowed baseline crates:
 - `serde`
 - `serde_json`
 
-Avoid adding runtime crates for HTTP, CSV, CLI parsing, logging, async, regex, or URL parsing unless tests prove the standard-library implementation is inadequate. If a crate is added, add a short rationale to `THIRD_PARTY.md`.
+Avoid adding runtime crates for HTTP, CSV, CLI parsing, logging, async, regex, or URL parsing unless tests prove the standard-library implementation is inadequate.
 
 ## Test-driven development
 
