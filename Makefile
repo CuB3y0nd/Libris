@@ -3,6 +3,7 @@ COMPOSE ?= docker compose
 COMPOSE_FILE ?= deploy/compose/docker-compose.yml
 PROJECT ?= zotero-s3-webdav
 PROVISIONER_IMAGE ?= zotero-s3-webdav-provisioner:dev
+DOCKER_BUILD_NETWORK ?= default
 
 .PHONY: help fmt clippy test validate build docker-build up up-edge provision down logs smoke clean
 
@@ -36,7 +37,7 @@ build:
 	cargo build --workspace --locked
 
 docker-build:
-	docker build -f apps/provisioner/Dockerfile -t $(PROVISIONER_IMAGE) .
+	docker build --network=$(DOCKER_BUILD_NETWORK) -f apps/provisioner/Dockerfile -t $(PROVISIONER_IMAGE) .
 
 up:
 	$(COMPOSE) --project-name $(PROJECT) --env-file .env -f $(COMPOSE_FILE) up -d --build

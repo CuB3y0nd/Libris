@@ -67,3 +67,18 @@ docker compose --env-file .env -f deploy/compose/docker-compose.yml up -d
 ```
 
 For provisioner changes, redeploy the previous image and rerun `make provision`.
+
+## Docker build network
+
+The default image build uses Docker's default build network:
+
+```sh
+make docker-build
+```
+
+If the Docker build container cannot resolve `index.crates.io` but the host can,
+reuse the host network for the build:
+
+```sh
+make DOCKER_BUILD_NETWORK=host docker-build
+```
