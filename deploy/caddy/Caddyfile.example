@@ -1,0 +1,26 @@
+{
+  # Configure global trusted_proxies here if Caddy sits behind another proxy/CDN.
+  # servers {
+  #   trusted_proxies static private_ranges
+  # }
+}
+
+{$PUBLIC_WEBDAV_HOST} {
+  encode gzip
+
+  reverse_proxy sftpgo:8090 {
+    # Caddy preserves Host by default; keep this explicit for WebDAV reviewability.
+    header_up Host {host}
+    header_up X-Forwarded-Proto {scheme}
+    header_up X-Forwarded-Host {host}
+  }
+}
+
+# Optional admin host. Prefer VPN/private network access in production.
+{$PUBLIC_ADMIN_HOST} {
+  @private remote_ip 127.0.0.1/32 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+  handle @private {
+    reverse_proxy sftpgo:8080
+  }
+  respond "forbidden" 403
+}

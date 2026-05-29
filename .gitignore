@@ -1,0 +1,11 @@
+/target/
+**/target/
+.env
+*.local
+*.log
+.DS_Store
+.idea/
+.vscode/
+coverage/
+dist/
+*.tmp

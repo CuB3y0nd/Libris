@@ -1,0 +1,19 @@
+# Optional local E2E stack. MinIO is a test double only, not a production dependency.
+services:
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    container_name: zotero-s3-webdav-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin-change-me
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - zotero_webdav
+
+volumes:
+  minio_data:

@@ -1,0 +1,70 @@
+services:
+  sftpgo:
+    image: drakkan/sftpgo:v2-alpine-slim
+    container_name: zotero-s3-webdav-sftpgo
+    restart: unless-stopped
+    environment:
+      SFTPGO_LOG_FILE_PATH: ""
+      SFTPGO_DATA_PROVIDER__DRIVER: sqlite
+      SFTPGO_DATA_PROVIDER__NAME: /var/lib/sftpgo/sftpgo.db
+      SFTPGO_DATA_PROVIDER__CREATE_DEFAULT_ADMIN: "true"
+      SFTPGO_DEFAULT_ADMIN_USERNAME: ${SFTPGO_ADMIN_USER:?set SFTPGO_ADMIN_USER}
+      SFTPGO_DEFAULT_ADMIN_PASSWORD: ${SFTPGO_ADMIN_PASSWORD:?set SFTPGO_ADMIN_PASSWORD}
+      SFTPGO_WEBDAVD__BINDINGS__0__PORT: "8090"
+      SFTPGO_WEBDAVD__BINDINGS__0__ADDRESS: "0.0.0.0"
+      SFTPGO_WEBDAVD__BINDINGS__0__CLIENT_IP_PROXY_HEADER: X-Forwarded-For
+      SFTPGO_WEBDAVD__BINDINGS__0__PROXY_ALLOWED: ${TRUSTED_PROXY_CIDRS:-127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}
+      SFTPGO_HTTPD__BINDINGS__0__PORT: "8080"
+      SFTPGO_HTTPD__BINDINGS__0__ADDRESS: "0.0.0.0"
+    expose:
+      - "8090"
+      - "8080"
+    ports:
+      # Loopback bindings support an existing host-level Caddy.
+      - "127.0.0.1:${SFTPGO_WEBDAV_PORT:-8090}:8090"
+      - "127.0.0.1:${SFTPGO_ADMIN_PORT:-8080}:8080"
+    volumes:
+      - sftpgo_state:/var/lib/sftpgo
+      - sftpgo_config:/etc/sftpgo
+      - sftpgo_data:/srv/sftpgo/data
+      - sftpgo_backups:/srv/sftpgo/backups
+    networks:
+      - zotero_webdav
+
+  provisioner:
+    build:
+      context: ../..
+      dockerfile: apps/provisioner/Dockerfile
+    container_name: zotero-s3-webdav-provisioner
+    restart: "no"
+    depends_on:
+      sftpgo:
+        condition: service_started
+    environment:
+      SFTPGO_ENDPOINT: http://sftpgo:8080
+      SFTPGO_ADMIN_USER: ${SFTPGO_ADMIN_USER:?set SFTPGO_ADMIN_USER}
+      SFTPGO_ADMIN_PASSWORD: ${SFTPGO_ADMIN_PASSWORD:?set SFTPGO_ADMIN_PASSWORD}
+      USER_FILE: ${USER_FILE:-/config/users.csv}
+      S3_BUCKET: ${S3_BUCKET:?set S3_BUCKET}
+      S3_REGION: ${S3_REGION:?set S3_REGION}
+      S3_ENDPOINT: ${S3_ENDPOINT:-}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?set S3_SECRET_KEY}
+      S3_PREFIX_BASE: ${S3_PREFIX_BASE:-users}
+      PROVISIONER_DRY_RUN: ${PROVISIONER_DRY_RUN:-false}
+      PROVISIONER_RETRY_COUNT: ${PROVISIONER_RETRY_COUNT:-60}
+      PROVISIONER_RETRY_DELAY_MS: ${PROVISIONER_RETRY_DELAY_MS:-1000}
+    volumes:
+      - ../../config/users.csv:/config/users.csv:ro
+    networks:
+      - zotero_webdav
+
+networks:
+  zotero_webdav:
+    name: zotero_webdav
+
+volumes:
+  sftpgo_state:
+  sftpgo_config:
+  sftpgo_data:
+  sftpgo_backups:

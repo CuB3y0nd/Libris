@@ -1,0 +1,22 @@
+# Use this when Caddy runs on the Docker host instead of inside this Compose project.
+# Keep WebDAV on a dedicated virtual host; avoid handle_path/strip_prefix rewrites.
+
+dav.example.com {
+  encode gzip
+
+  reverse_proxy 127.0.0.1:8090 {
+    # SFTPGo WebDAV needs Host preservation for COPY/MOVE semantics.
+    header_up Host {host}
+    header_up X-Forwarded-Proto {scheme}
+    header_up X-Forwarded-Host {host}
+  }
+}
+
+# Optional. Do not expose this publicly without an additional auth/network layer.
+sftpgo-admin.example.com {
+  @private remote_ip 127.0.0.1/32 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+  handle @private {
+    reverse_proxy 127.0.0.1:8080
+  }
+  respond "forbidden" 403
+}

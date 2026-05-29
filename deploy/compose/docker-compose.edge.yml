@@ -1,0 +1,23 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: zotero-s3-webdav-caddy
+    restart: unless-stopped
+    depends_on:
+      - sftpgo
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      PUBLIC_WEBDAV_HOST: ${PUBLIC_WEBDAV_HOST:?set PUBLIC_WEBDAV_HOST}
+      PUBLIC_ADMIN_HOST: ${PUBLIC_ADMIN_HOST:?set PUBLIC_ADMIN_HOST}
+    volumes:
+      - ../caddy/Caddyfile.example:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - zotero_webdav
+
+volumes:
+  caddy_data:
+  caddy_config:

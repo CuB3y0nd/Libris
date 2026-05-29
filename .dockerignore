@@ -1,0 +1,6 @@
+.git
+.env
+config/users.csv
+**/target
+.DS_Store
+coverage

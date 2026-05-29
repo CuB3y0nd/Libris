@@ -1,0 +1,5 @@
+# Restricted CSV: username,password
+# No quotes, no commas inside fields. Usernames: A-Z a-z 0-9 . _ -
+alice,change-this-alice-password
+bob,change-this-bob-password
+carol,change-this-carol-password
