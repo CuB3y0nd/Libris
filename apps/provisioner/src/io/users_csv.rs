@@ -91,4 +91,12 @@ mod tests {
     fn rejects_extra_columns() {
         assert!(parse_users_csv("alice,p1,extra").is_err());
     }
+
+    #[test]
+    fn accepts_punctuation_in_passwords() -> Result<()> {
+        let users = parse_users_csv("alice,?J8#L/4/cYl9y(\"[]O_@")?;
+
+        assert_eq!(users[0].password(), "?J8#L/4/cYl9y(\"[]O_@");
+        Ok(())
+    }
 }

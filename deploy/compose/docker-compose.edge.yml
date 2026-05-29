@@ -10,7 +10,6 @@ services:
       - "443:443"
     environment:
       PUBLIC_WEBDAV_HOST: ${PUBLIC_WEBDAV_HOST:?set PUBLIC_WEBDAV_HOST}
-      PUBLIC_ADMIN_HOST: ${PUBLIC_ADMIN_HOST:?set PUBLIC_ADMIN_HOST}
     volumes:
       - ../caddy/Caddyfile.example:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

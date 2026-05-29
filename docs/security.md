@@ -23,7 +23,7 @@ Primary threats:
 |---|---|
 | Username path traversal | Strict username validator; no `/`, `\`, `..`, whitespace, colon, or empty names. |
 | Cross-user access | Deterministic prefix `base/username/`; duplicate username rejection. |
-| Admin API exposure | Bind admin port to loopback or private Docker network; Caddy admin host gated by IP matcher. |
+| Admin API exposure | Do not publish the admin port; keep the REST API on the private Docker network for the provisioner only. |
 | Secret leakage | Redacted errors; no payload logging. |
 | S3 blast radius | One bucket/prefix in v1; optional per-user IAM credentials in a future hardening mode. |
 | Proxy spoofing | Configure SFTPGo trusted proxy ranges and Caddy trusted proxies if behind CDN. |

@@ -11,12 +11,3 @@ dav.example.com {
     header_up X-Forwarded-Host {host}
   }
 }
-
-# Optional. Do not expose this publicly without an additional auth/network layer.
-sftpgo-admin.example.com {
-  @private remote_ip 127.0.0.1/32 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
-  handle @private {
-    reverse_proxy 127.0.0.1:8080
-  }
-  respond "forbidden" 403
-}

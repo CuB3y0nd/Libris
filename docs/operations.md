@@ -4,7 +4,7 @@
 
 ### Existing Caddy on host
 
-Use the base Compose file only. It binds SFTPGo WebDAV and Admin API to loopback:
+Use the base Compose file only. It binds SFTPGo WebDAV to loopback:
 
 ```sh
 docker compose --env-file .env -f deploy/compose/docker-compose.yml up -d --build
@@ -35,7 +35,7 @@ docker compose --env-file .env \
 
 This harness intentionally does not delete users or S3 data automatically. Offboarding requires an explicit runbook:
 
-1. Disable/delete the SFTPGo user in the Admin UI or future CLI command.
+1. Disable/delete the SFTPGo user with an explicit future CLI/admin operation.
 2. Decide whether to retain, archive, or delete the user's S3 prefix.
 3. Record the action.
 

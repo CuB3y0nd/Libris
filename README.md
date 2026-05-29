@@ -41,12 +41,10 @@ cp config/users.csv.example config/users.csv
 
 ```sh
 PUBLIC_WEBDAV_HOST=dav.example.com
-PUBLIC_ADMIN_HOST=sftpgo-admin.example.com
 
 SFTPGO_ADMIN_USER=admin
 SFTPGO_ADMIN_PASSWORD=<long-random-admin-password>
 SFTPGO_WEBDAV_PORT=5227
-SFTPGO_ADMIN_PORT=8080
 
 S3_BUCKET=<your-aws-bucket>
 S3_REGION=<your-aws-region>
@@ -66,8 +64,12 @@ alice,long-random-webdav-password
 bob,another-long-random-webdav-password
 ```
 
-Usernames may contain ASCII letters, digits, `.`, `_`, and `-`. Each user gets a
-separate SFTPGo account and a separate S3 prefix.
+Usernames may contain ASCII letters, digits, `.`, `_`, and `-`. Passwords may
+contain punctuation such as `#`, `/`, `"`, `[`, `]`, `_`, and `@`. The restricted
+CSV format does not support commas, newlines, or leading/trailing spaces inside
+passwords.
+
+Each user gets a separate SFTPGo WebDAV account and a separate S3 prefix.
 
 ## Deploy With An Existing Host Caddy
 
@@ -113,7 +115,7 @@ make up-edge
 ```
 
 This exposes ports `80` and `443` from the Caddy container and reverse-proxies
-the dedicated WebDAV host to SFTPGo inside the Compose network.
+only the dedicated WebDAV host to SFTPGo inside the Compose network.
 
 ## Verify The Deployment
 
@@ -201,7 +203,8 @@ runtime crates.
 
 - Do not commit `.env`, `config/users.csv`, real AWS keys, WebDAV passwords, or
   generated tokens.
-- Keep the SFTPGo Admin API private. The default Compose file binds it to
-  loopback.
+- Only WebDAV is published to the host/public edge. SFTP, FTP, the SFTPGo
+  WebAdmin, and the SFTPGo WebClient are disabled. The SFTPGo REST API remains
+  reachable only on the Compose network for the provisioner.
 - Do not share one WebDAV account across multiple Zotero users.
 - Do not mount Zotero's local data directory into WebDAV or S3.
