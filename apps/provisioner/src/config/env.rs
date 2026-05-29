@@ -113,7 +113,7 @@ mod tests {
     #[test]
     fn reads_required_config_and_defaults() -> Result<()> {
         let pairs = HashMap::from([
-            ("SFTPGO_ENDPOINT", "http://sftpgo:8080"),
+            ("SFTPGO_ENDPOINT", "http://sftpgo:5757"),
             ("SFTPGO_ADMIN_USER", "admin"),
             ("SFTPGO_ADMIN_PASSWORD", "secret"),
             ("S3_BUCKET", "bucket"),
@@ -134,7 +134,7 @@ mod tests {
     #[test]
     fn rejects_invalid_bool() {
         let pairs = HashMap::from([
-            ("SFTPGO_ENDPOINT", "http://sftpgo:8080"),
+            ("SFTPGO_ENDPOINT", "http://sftpgo:5757"),
             ("SFTPGO_ADMIN_USER", "admin"),
             ("SFTPGO_ADMIN_PASSWORD", "secret"),
             ("S3_BUCKET", "bucket"),

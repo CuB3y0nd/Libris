@@ -6,7 +6,7 @@ The provisioner is a synchronous Rust CLI that reconciles `config/users.csv` int
 
 Environment variables:
 
-- `SFTPGO_ENDPOINT` internal HTTP endpoint, e.g. `http://sftpgo:8080`
+- `SFTPGO_ENDPOINT` internal HTTP endpoint, e.g. `http://sftpgo:5757`
 - `SFTPGO_ADMIN_USER`
 - `SFTPGO_ADMIN_PASSWORD`
 - `USER_FILE`

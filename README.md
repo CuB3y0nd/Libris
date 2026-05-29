@@ -44,6 +44,7 @@ PUBLIC_WEBDAV_HOST=dav.example.com
 
 SFTPGO_ADMIN_USER=admin
 SFTPGO_ADMIN_PASSWORD=<long-random-admin-password>
+SFTPGO_ADMIN_PORT=5757
 SFTPGO_WEBDAV_PORT=5227
 
 S3_BUCKET=<your-aws-bucket>
